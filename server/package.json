@@ -1,0 +1,23 @@
+{
+  "name": "drag-and-plan",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndyWang99/drag-and-plan.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AndyWang99/drag-and-plan/issues"
+  },
+  "homepage": "https://github.com/AndyWang99/drag-and-plan#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "socketio": "^1.0.0"
+  }
+}
