@@ -3,6 +3,7 @@ package com.sodirea.drag_and_plan;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -42,25 +43,9 @@ import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-/**
- * A login screen that offers login via email/password.
- */
+
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * Id to identity READ_CONTACTS permission request.
-     */
-    private static final int REQUEST_READ_CONTACTS = 0;
-
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-
-    // UI references.
     private FirebaseAuth mAuth;
 
     @Override
@@ -70,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        //updateUI(currentUser);
     }
 
     private void createAccount(String email, String password) {
@@ -120,7 +105,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updateUI(FirebaseUser user) {
-        //...
+        Intent redir = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(redir);
     }
 
     public void accClick(View v) {
@@ -128,9 +114,9 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailText = (EditText) findViewById(R.id.emailText);
         EditText passText = (EditText) findViewById(R.id.passText);
 
-        if (i == R.id.emailText) {
+        if (i == R.id.loginBtn) {
             createAccount(emailText.getText().toString(), passText.getText().toString());
-        } else if (i == R.id.emailText) {
+        } else if (i == R.id.createBtn) {
             signIn(emailText.getText().toString(), passText.getText().toString());
         } else {
             signOut();
