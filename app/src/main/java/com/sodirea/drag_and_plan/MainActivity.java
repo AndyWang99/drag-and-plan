@@ -19,8 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
+//import com.google.android.gms.location.FusedLocationProviderClient;
+//import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -31,9 +31,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity {//implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+    }
+
+    public void onClick(View v) {
+        Intent redir = new Intent(MainActivity.this, HomeActivity.class);
+        startActivity(redir);
+    }
+    /*private GoogleMap mMap;
     private SupportMapFragment mapFragment;
     private FusedLocationProviderClient mFusedLocationClient;
 
@@ -145,5 +155,5 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onDestroy() {
         super.onDestroy();
         mapFragment.onDestroy();
-    }
+    }*/
 }
