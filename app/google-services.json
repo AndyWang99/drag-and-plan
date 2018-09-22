@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "861755551199",
+    "firebase_url": "https://drop-and-plan.firebaseio.com",
+    "project_id": "drop-and-plan",
+    "storage_bucket": "drop-and-plan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861755551199:android:9a9c5451ec727862",
+        "android_client_info": {
+          "package_name": "com.sodirea.drag_and_plan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861755551199-ebf9v4krp4n85g2hrfrmjd3nlhtigeo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWh6R0ia19DHH2QZDCzEWBjtKXTWksix8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
