@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">drag-and-plan</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="categories_array">
+        <item>Choose a Category:</item>
+        <item>Category 1</item>
+        <item>Category 2</item>
+        <item>Category 3</item>
+    </string-array>
 </resources>
