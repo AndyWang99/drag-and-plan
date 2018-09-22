@@ -3,6 +3,7 @@ package com.sodirea.drag_and_plan;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
@@ -18,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -26,11 +29,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private SupportMapFragment mapFragment;
+    private FusedLocationProviderClient mFusedLocationClient;
+
+    private static final String GOOGLE_PLACES_API_KEY = "AIzaSyB4tCN4rAimWOBA4qXZhucLJhm6brcLKwg";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         Button setNewPlan = (Button) findViewById(R.id.setPlan);
         setNewPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) // if they haven't given permission to use location yet, prompt and check if they gave it again
                 != PackageManager.PERMISSION_GRANTED) {
@@ -88,6 +98,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                LatLng yourLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                                mMap.addMarker(new MarkerOptions().position(yourLoc)
+                                        .title("Your Location"));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(yourLoc));
+                            }
+                        }
+                    });
         } else {
             Toast toast = Toast.makeText(MainActivity.this, "Could not get location", Toast.LENGTH_LONG);
             toast.show();

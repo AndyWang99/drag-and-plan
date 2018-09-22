@@ -56,7 +56,8 @@
         app:layout_constraintEnd_toEndOf="@+id/drawer_layout"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        map:mapType="normal" />
+        map:mapType="normal"
+        map:cameraZoom="17" />
 
 
 </android.support.constraint.ConstraintLayout>
