@@ -8,8 +8,3 @@
 /build
 /captures
 .externalNativeBuild
-<<<<<<< HEAD
-*.ser
-=======
-google_maps_api.xml
->>>>>>> 9757c4a2b697ba39d4aafd29261c32674318a75c

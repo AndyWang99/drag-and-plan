@@ -104,9 +104,14 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signOut();
     }
 
-    private void updateUI(FirebaseUser user) {
-        Intent redir = new Intent(LoginActivity.this, MainActivity.class);
+    private void redirect() {
+        Intent redir = new Intent(LoginActivity.this, SetupActivity.class);
         startActivity(redir);
+    }
+
+    private void updateUI(FirebaseUser user) {
+        //Intent redir = new Intent(LoginActivity.this, MainActivity.class);
+        //startActivity(redir);
     }
 
     public void accClick(View v) {
@@ -116,10 +121,10 @@ public class LoginActivity extends AppCompatActivity {
 
         if (i == R.id.loginBtn) {
             createAccount(emailText.getText().toString(), passText.getText().toString());
+            redirect();
         } else if (i == R.id.createBtn) {
             signIn(emailText.getText().toString(), passText.getText().toString());
-        } else {
-            signOut();
+            redirect();
         }
     }
 
