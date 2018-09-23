@@ -36,9 +36,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {//implements OnMapReadyCallback {
+
+    private static final int NUM_PEOPLE = 2;
 
     private Socket socket;
 
@@ -83,7 +88,15 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                socket.emit("receieveProperties"); // give server the client's properties
+                JSONObject data = new JSONObject();
+                try {
+                    data.put("interests", "BLAH");
+                    data.put("latitude", 43.761539);
+                    data.put("longitude", -79.411079);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                socket.emit("receieveProperties", data); // give server the client's properties
             }
         }).on("giveCurrentQueueSize", new Emitter.Listener() {
             @Override
@@ -92,9 +105,33 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
                     @Override
                     public void run() {
                         int numPeople = (Integer) args[0];
-                        counter.setText(numPeople + "/4");
+                        counter.setText(numPeople+1 + "/" + NUM_PEOPLE);
                     }
                 });
+            }
+        }).on("userModifiedQueue", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                MainActivity.this.runOnUiThread(new Runnable() {                                    // run on UI thread so that views can be added or modified
+                    @Override
+                    public void run() {
+                        int numPeople = (Integer) args[0];
+                        counter.setText(numPeople + "/" + NUM_PEOPLE);
+                    }
+                });
+            }
+        }).on("goToLocation", new Emitter.Listener() {
+            @Override
+            public void call(final Object... args) {
+                JSONObject data = (JSONObject) args[0];
+                Intent intent = new Intent(MainActivity.this, LocationActivity.class);
+                try {
+                    intent.putExtra("latitude", (double) data.get("latitude"));
+                    intent.putExtra("longitude", (double) data.get("longitude"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(intent);
             }
         });
     }
