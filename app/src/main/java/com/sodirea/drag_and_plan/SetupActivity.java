@@ -19,7 +19,8 @@ public class SetupActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
-
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("message");
 
     }
 
