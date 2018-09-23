@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
     private static final int NUM_PEOPLE = 2;
 
     private Socket socket;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     {
         try {
@@ -88,15 +91,33 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
         socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
             @Override
             public void call(Object... args) {
-                JSONObject data = new JSONObject();
-                try {
-                    data.put("interests", "BLAH");
-                    data.put("latitude", 43.761539);
-                    data.put("longitude", -79.411079);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                final JSONObject data = new JSONObject();
+
+                mFusedLocationClient = LocationServices.getFusedLocationProviderClient(MainActivity.this);
+
+                if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
+                    mFusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(MainActivity.this, new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        try {
+                                            data.put("interests", "BLAH");
+                                            data.put("latitude", location.getLatitude());
+                                            data.put("longitude", location.getLongitude());
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        socket.emit("receieveProperties", data); // give server the client's properties
+                                    }
+                                }
+                            });
+                } else {
+                    Toast toast = Toast.makeText(MainActivity.this, "Could not get location", Toast.LENGTH_LONG);
+                    toast.show();
                 }
-                socket.emit("receieveProperties", data); // give server the client's properties
+
             }
         }).on("giveCurrentQueueSize", new Emitter.Listener() {
             @Override
@@ -105,7 +126,7 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
                     @Override
                     public void run() {
                         int numPeople = (Integer) args[0];
-                        counter.setText(numPeople+1 + "/" + NUM_PEOPLE);
+                        counter.setText(numPeople + 1 + "/" + NUM_PEOPLE);
                     }
                 });
             }
@@ -135,21 +156,11 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
             }
         });
     }
-    /*private GoogleMap mMap;
-    private SupportMapFragment mapFragment;
-    private FusedLocationProviderClient mFusedLocationClient;
-
-    private static final String GOOGLE_PLACES_API_KEY = "AIzaSyB4tCN4rAimWOBA4qXZhucLJhm6brcLKwg";
-
-    @Override
+}
+    /*@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        mapFragment.onCreate(savedInstanceState);
 
         final DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -173,79 +184,15 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
             public void onDrawerStateChanged(int newState) {
 
             }
-        });
+        });*/
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        Button setNewPlan = (Button) findViewById(R.id.setPlan);
+        /*Button setNewPlan = (Button) findViewById(R.id.setPlan);
         setNewPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, SetupActivity.class);
                 startActivity(intent);
             }
-        });
-
-    }
-
-    @Override
-    public void onMapReady(final GoogleMap googleMap) {
-        mMap = googleMap;
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) // if they haven't given permission to use location yet, prompt and check if they gave it again
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(MainActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    123);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            mMap.setMyLocationEnabled(true);
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                LatLng yourLoc = new LatLng(location.getLatitude(), location.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(yourLoc)
-                                        .title("Your Location"));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(yourLoc));
-                            }
-                        }
-                    });
-        } else {
-            Toast toast = Toast.makeText(MainActivity.this, "Could not get location", Toast.LENGTH_LONG);
-            toast.show();
-        }
-    }
+        });*/
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mapFragment.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mapFragment.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mapFragment.onPause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mapFragment.onStop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mapFragment.onDestroy();
-    }*/
-}
