@@ -20,6 +20,7 @@ public class SetupActivity extends AppCompatActivity {
 
     public void onClick(View v) {
 
+
     }
 
     public void toLogin(View v) {
