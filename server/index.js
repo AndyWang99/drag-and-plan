@@ -9,15 +9,14 @@ server.listen(8080, function() {
 });
 
 io.on('connection', function(socket) {
-	console.log("User Connected!")
-	socket.emit('requestProperties'); // have client send interests, latitude, and longitude
+	console.log("User Connected!");
 	socket.emit('giveCurrentQueueSize', queue.length); // send them the current number of people waiting
 
 	socket.on('disconnect', function() {
 		console.log("User Disconnected.");
-		for (int i = 0; i < queue.length; i++) {
+		for (var i = 0; i < queue.length; i++) {
 			if (socket.id == queue[i].id) {
-				queue.splice(i, 1); // remove user from queue when they disconnect
+				//queue.splice(i, 1); // remove user from queue when they disconnect
 				socket.broadcast.emit('userLeftQueue'); // notify other users that a user has left
 				break;
 			}
@@ -25,7 +24,7 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('receieveProperties', function(data) {
-		queue.push(new person(socket.id, data.interests, data.latitude, data.longitude));
+		//queue.push(new person(socket.id, data.interests, data.latitude, data.longitude));
 		socket.broadcast.emit('userJoinedQueue'); // notify other users that a new user has joined
 		if (queue.length == 4) {
 			// send them average coordinates between the people, reset the queue
