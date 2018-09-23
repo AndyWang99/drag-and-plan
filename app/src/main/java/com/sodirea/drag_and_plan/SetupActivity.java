@@ -15,12 +15,7 @@ public class SetupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup);
-
-        LinearLayout.LayoutParams layout_param = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.fill_parent,
-                height * 2);
-        mLayout = (LinearLayout) findViewById(R.id.layout_menu);
-        mLayout.setLayoutParams(layout_param);
+        
     }
 
     public void onClick(View v) {
