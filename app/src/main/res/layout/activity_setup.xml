@@ -111,6 +111,84 @@
                 android:inputType="textPersonName"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
+            <TextView
+                android:id="@+id/interestText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Interests:"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/techOption"
+                            android:layout_width="115dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Technology" />
+
+                        <RadioButton
+                            android:id="@+id/exerciseOption"
+                            android:layout_width="115dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Exercise" />
+
+                        <RadioButton
+                            android:id="@+id/musicOption"
+                            android:layout_width="115dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Music" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/sportsOption"
+                            android:layout_width="115dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Sports" />
+
+                        <RadioButton
+                            android:id="@+id/gamesOption"
+                            android:layout_width="115dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Video Games" />
+
+                        <RadioButton
+                            android:id="@+id/readingOption"
+                            android:layout_width="115dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Reading" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
             <Button
                 android:id="@+id/createButton"
                 android:layout_width="match_parent"
