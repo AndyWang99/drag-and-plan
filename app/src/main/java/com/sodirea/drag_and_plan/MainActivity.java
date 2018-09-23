@@ -2,6 +2,7 @@ package com.sodirea.drag_and_plan;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,14 +50,17 @@ import java.net.URISyntaxException;
 
 public class MainActivity extends AppCompatActivity {//implements OnMapReadyCallback {
 
+    FirebaseFirestore db;
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
     private static final int NUM_PEOPLE = 2;
-
+    private FirebaseAuth mAuth;
     private Socket socket;
     private FusedLocationProviderClient mFusedLocationClient;
 
     {
         try {
-            socket = IO.socket("http://192.168.43.189:8080");
+            socket = IO.socket("http://192.168.43.244:8080");
         } catch (URISyntaxException e) {
         }
     }
@@ -82,6 +90,47 @@ public class MainActivity extends AppCompatActivity {//implements OnMapReadyCall
                 }
             }
         });
+
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
+        editor = getSharedPreferences("MyPrefsFile", MODE_PRIVATE).edit();
+        prefs = getSharedPreferences("MyPrefsFile", MODE_PRIVATE);
+        boolean userLogged = prefs.getBoolean("loggedIn", false);
+
+        if (!userLogged) {
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            editor.putBoolean("loggedIn", true);
+            editor.apply();
+            startActivity(loginIntent);
+        } else {
+            Button accBtn = (Button) findViewById(R.id.accBtn);
+            accBtn.setText("Sign Out");
+            accBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editor.clear();
+                    editor.putBoolean("loggedIn", false);
+                    editor.apply();
+                    mAuth.signOut();
+
+                    Intent toLogin = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(toLogin);
+                }
+            });
+        }
+
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        EditText nameText = (EditText) findViewById(R.id.nameText);
+        //nameText.setText(currentUser.getDisplayName());
+    }
+
+    public void login(View v) {
+        editor.putBoolean("loggedIn", true);
+        editor.apply();
+
+        Intent toLogin = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(toLogin);
     }
 
     public void configureSocketEvents() {

@@ -4,7 +4,7 @@ var io = require('socket.io')(server);
 
 var queue = [];
 
-const num_people = 1;
+const num_people = 2;
 
 server.listen(8080, function() {
 	console.log("Server is now running...");
